@@ -16,7 +16,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             TipoDocumentoSeeder::class,
+            ConfiguracionInstitucionalSeeder::class,
             SedeSeeder::class,
+            GrupoAcademicoSeeder::class,
+            FacultadSeeder::class,
+            CarreraSeeder::class,
             RolePermissionSeeder::class,
         ]);
     }

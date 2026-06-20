@@ -35,10 +35,10 @@
                         <td class="px-4 py-3 text-right">
                             <a class="text-blue-700 hover:underline" href="{{ route('personal.trabajadores.show', $trabajador) }}">Ver</a>
                             <a class="ml-3 text-blue-700 hover:underline" href="{{ route('personal.trabajadores.edit', $trabajador) }}">Editar</a>
-                            <form action="{{ route('personal.trabajadores.destroy', $trabajador) }}" method="POST" class="ml-3 inline">
+                            <form action="{{ route('personal.trabajadores.destroy', $trabajador) }}" method="POST" class="ml-3 inline" data-confirm-title="Desactivar trabajador" data-confirm="¿Estas seguro de desactivar este trabajador? El registro no se eliminara, solo quedara inactivo.">
                                 @csrf
                                 @method('DELETE')
-                                <button class="text-red-700 hover:underline" onclick="return confirm('¿Desactivar trabajador?')">Desactivar</button>
+                                <button class="text-red-700 hover:underline">Desactivar</button>
                             </form>
                         </td>
                     </tr>

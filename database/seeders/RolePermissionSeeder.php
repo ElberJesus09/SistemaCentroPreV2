@@ -15,6 +15,7 @@ class RolePermissionSeeder extends Seeder
      * @var list<string>
      */
     private array $permisos = [
+        'acceder dashboard',
         'acceder modulo personal',
         'ver trabajadores',
         'crear trabajadores',
@@ -30,6 +31,25 @@ class RolePermissionSeeder extends Seeder
         'crear roles',
         'editar roles',
         'eliminar roles',
+        'acceder modulo institucional',
+        'ver institucional',
+        'editar institucional',
+        'ver sedes',
+        'crear sedes',
+        'editar sedes',
+        'eliminar sedes',
+        'ver grupos academicos',
+        'crear grupos academicos',
+        'editar grupos academicos',
+        'eliminar grupos academicos',
+        'ver facultades',
+        'crear facultades',
+        'editar facultades',
+        'eliminar facultades',
+        'ver carreras',
+        'crear carreras',
+        'editar carreras',
+        'eliminar carreras',
     ];
 
     public function run(): void
@@ -51,16 +71,26 @@ class RolePermissionSeeder extends Seeder
         $superadmin = Role::query()->firstOrCreate(['name' => 'Superadmin', 'guard_name' => 'web']);
         $administrador = Role::query()->firstOrCreate(['name' => 'Administrador', 'guard_name' => 'web']);
         $secretaria = Role::query()->firstOrCreate(['name' => 'Secretaria', 'guard_name' => 'web']);
-        Role::query()->firstOrCreate(['name' => 'Docente', 'guard_name' => 'web']);
+        $docente = Role::query()->firstOrCreate(['name' => 'Docente', 'guard_name' => 'web']);
 
         $superadmin->syncPermissions($this->permisos);
         $administrador->syncPermissions($this->permisos);
         $secretaria->syncPermissions([
+            'acceder dashboard',
             'acceder modulo personal',
             'ver trabajadores',
             'crear trabajadores',
             'editar trabajadores',
             'ver usuarios',
+            'acceder modulo institucional',
+            'ver institucional',
+            'ver sedes',
+            'ver grupos academicos',
+            'ver facultades',
+            'ver carreras',
+        ]);
+        $docente->syncPermissions([
+            'acceder dashboard',
         ]);
 
         $admin = User::query()->firstOrCreate(

@@ -19,14 +19,26 @@ class Sede extends Model
      */
     protected $fillable = [
         'nombre',
+        'tipo',
         'direccion',
+        'distrito',
+        'provincia',
+        'departamento',
+        'pais',
+        'horario',
+        'correo',
         'telefono',
+        'mapa_url',
+        'es_principal',
+        'permite_acceso_sistema',
         'estado',
     ];
 
     protected function casts(): array
     {
         return [
+            'es_principal' => 'boolean',
+            'permite_acceso_sistema' => 'boolean',
             'estado' => 'boolean',
         ];
     }

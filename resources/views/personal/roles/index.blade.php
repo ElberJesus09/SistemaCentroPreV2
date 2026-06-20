@@ -21,10 +21,10 @@
                         <td class="px-4 py-3 text-right">
                             <a class="text-blue-700 hover:underline" href="{{ route('personal.roles.show', $role) }}">Ver</a>
                             <a class="ml-3 text-blue-700 hover:underline" href="{{ route('personal.roles.edit', $role) }}">Editar</a>
-                            <form action="{{ route('personal.roles.destroy', $role) }}" method="POST" class="ml-3 inline">
+                            <form action="{{ route('personal.roles.destroy', $role) }}" method="POST" class="ml-3 inline" data-confirm-title="Eliminar rol" data-confirm="¿Estas seguro de eliminar este rol? Esta accion puede afectar accesos de usuarios asociados.">
                                 @csrf
                                 @method('DELETE')
-                                <button class="text-red-700 hover:underline" onclick="return confirm('¿Eliminar rol?')">Eliminar</button>
+                                <button class="text-red-700 hover:underline">Eliminar</button>
                             </form>
                         </td>
                     </tr>

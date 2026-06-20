@@ -33,10 +33,10 @@
                         <td class="px-4 py-3 text-right">
                             <a class="text-blue-700 hover:underline" href="{{ route('personal.usuarios.show', $usuario) }}">Ver</a>
                             <a class="ml-3 text-blue-700 hover:underline" href="{{ route('personal.usuarios.edit', $usuario) }}">Editar</a>
-                            <form action="{{ route('personal.usuarios.destroy', $usuario) }}" method="POST" class="ml-3 inline">
+                            <form action="{{ route('personal.usuarios.destroy', $usuario) }}" method="POST" class="ml-3 inline" data-confirm-title="Desactivar usuario" data-confirm="¿Estas seguro de desactivar este usuario? No podra ingresar al sistema mientras este inactivo.">
                                 @csrf
                                 @method('DELETE')
-                                <button class="text-red-700 hover:underline" onclick="return confirm('¿Desactivar usuario?')">Desactivar</button>
+                                <button class="text-red-700 hover:underline">Desactivar</button>
                             </form>
                         </td>
                     </tr>

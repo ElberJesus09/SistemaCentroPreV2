@@ -72,10 +72,10 @@
                                 <td class="px-4 py-3">{{ $activo ? 'Activo' : 'Vencido o revocado' }}</td>
                                 <td class="px-4 py-3 text-right">
                                     @if ($activo)
-                                        <form action="{{ route('personal.usuarios.permisos-temporales.destroy', [$usuario, $permisoTemporal]) }}" method="POST">
+                                        <form action="{{ route('personal.usuarios.permisos-temporales.destroy', [$usuario, $permisoTemporal]) }}" method="POST" data-confirm-title="Revocar permiso temporal" data-confirm="¿Estas seguro de revocar este permiso temporal? El usuario perdera este acceso inmediatamente.">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="text-red-700 hover:underline" onclick="return confirm('¿Revocar este permiso temporal?')">Revocar</button>
+                                            <button class="text-red-700 hover:underline">Revocar</button>
                                         </form>
                                     @endif
                                 </td>
