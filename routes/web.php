@@ -6,6 +6,10 @@ use App\Http\Controllers\Institucional\CarreraController;
 use App\Http\Controllers\Institucional\ConfiguracionInstitucionalController;
 use App\Http\Controllers\Institucional\FacultadController;
 use App\Http\Controllers\Institucional\GrupoAcademicoController;
+use App\Http\Controllers\IngresosAdmision\Pagos\CodigoPagoExternoController;
+use App\Http\Controllers\IngresosAdmision\Pagos\ImportacionPagoController;
+use App\Http\Controllers\IngresosAdmision\Pagos\PagoController;
+use App\Http\Controllers\IngresosAdmision\Pagos\ReprocesamientoPagoController;
 use App\Http\Controllers\Institucional\SedeController;
 use App\Http\Controllers\Personal\RolController;
 use App\Http\Controllers\Personal\TrabajadorController;
@@ -67,4 +71,51 @@ Route::middleware(['auth', 'permission:acceder modulo institucional'])
         Route::resource('facultades', FacultadController::class)
             ->parameters(['facultades' => 'facultad']);
         Route::resource('carreras', CarreraController::class);
+    });
+
+Route::middleware(['auth', 'permission:acceder modulo ingresos admision'])
+    ->prefix('ingresos-admision')
+    ->name('ingresos-admision.')
+    ->group(function (): void {
+        Route::prefix('pagos')
+            ->name('pagos.')
+            ->group(function (): void {
+                Route::get('/', [PagoController::class, 'index'])
+                    ->middleware('permission:ver pagos')
+                    ->name('index');
+
+                Route::post('importaciones/previsualizar', [ImportacionPagoController::class, 'preview'])
+                    ->middleware('permission:importar pagos')
+                    ->name('importaciones.preview');
+
+                Route::post('importaciones/confirmar', [ImportacionPagoController::class, 'confirm'])
+                    ->middleware('permission:importar pagos')
+                    ->name('importaciones.confirm');
+
+                Route::resource('importaciones', ImportacionPagoController::class)
+                    ->middleware([
+                        'index' => 'permission:ver importaciones de pagos',
+                        'create' => 'permission:importar pagos',
+                        'show' => 'permission:ver detalles de importacion',
+                    ])
+                    ->parameters(['importaciones' => 'importacion'])
+                    ->only(['index', 'create', 'show']);
+                Route::get('importaciones/{importacion}/descargar', [ImportacionPagoController::class, 'download'])
+                    ->middleware('permission:descargar archivos de pagos')
+                    ->name('importaciones.download');
+
+                Route::post('detalles/{detalle}/reprocesar', [ReprocesamientoPagoController::class, 'store'])
+                    ->middleware('permission:reprocesar pagos observados')
+                    ->name('detalles.reprocesar');
+
+                Route::resource('codigos-externos', CodigoPagoExternoController::class)
+                    ->middleware('permission:gestionar codigos externos de pago')
+                    ->parameters(['codigos-externos' => 'codigoExterno'])
+                    ->except(['show']);
+
+                Route::get('/{pago}', [PagoController::class, 'show'])
+                    ->middleware('permission:ver pagos')
+                    ->whereNumber('pago')
+                    ->name('show');
+            });
     });

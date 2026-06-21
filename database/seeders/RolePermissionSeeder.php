@@ -50,6 +50,17 @@ class RolePermissionSeeder extends Seeder
         'crear carreras',
         'editar carreras',
         'eliminar carreras',
+        'acceder modulo ingresos admision',
+        'ver pagos',
+        'ver importaciones de pagos',
+        'importar pagos',
+        'descargar archivos de pagos',
+        'ver detalles de importacion',
+        'reprocesar pagos observados',
+        'observar pagos',
+        'rechazar pagos',
+        'anular pagos',
+        'gestionar codigos externos de pago',
     ];
 
     public function run(): void
@@ -88,6 +99,10 @@ class RolePermissionSeeder extends Seeder
             'ver grupos academicos',
             'ver facultades',
             'ver carreras',
+            'acceder modulo ingresos admision',
+            'ver pagos',
+            'ver importaciones de pagos',
+            'ver detalles de importacion',
         ]);
         $docente->syncPermissions([
             'acceder dashboard',

@@ -34,6 +34,12 @@
                 'Facultades' => ['ver facultades', 'crear facultades', 'editar facultades', 'eliminar facultades'],
                 'Carreras' => ['ver carreras', 'crear carreras', 'editar carreras', 'eliminar carreras'],
             ],
+            'Modulo Ingresos y Admision' => [
+                'Acceso general' => ['acceder modulo ingresos admision'],
+                'Pagos' => ['ver pagos', 'observar pagos', 'rechazar pagos', 'anular pagos'],
+                'Importaciones' => ['ver importaciones de pagos', 'importar pagos', 'descargar archivos de pagos', 'ver detalles de importacion', 'reprocesar pagos observados'],
+                'Codigos externos' => ['gestionar codigos externos de pago'],
+            ],
         ];
     @endphp
 

@@ -12,6 +12,11 @@
         ['label' => 'Facultades', 'route' => 'institucional.facultades.index', 'match' => 'institucional.facultades.', 'permission' => 'ver facultades'],
         ['label' => 'Carreras', 'route' => 'institucional.carreras.index', 'match' => 'institucional.carreras.', 'permission' => 'ver carreras'],
     ];
+    $incomeAdmissionNavigation = [
+        ['label' => 'Pagos', 'route' => 'ingresos-admision.pagos.index', 'match' => 'ingresos-admision.pagos.show', 'permission' => 'ver pagos'],
+        ['label' => 'Importaciones', 'route' => 'ingresos-admision.pagos.importaciones.index', 'match' => 'ingresos-admision.pagos.importaciones.', 'permission' => 'ver importaciones de pagos'],
+        ['label' => 'Codigos externos', 'route' => 'ingresos-admision.pagos.codigos-externos.index', 'match' => 'ingresos-admision.pagos.codigos-externos.', 'permission' => 'gestionar codigos externos de pago'],
+    ];
 @endphp
 
 <!DOCTYPE html>
@@ -116,6 +121,40 @@
                             </div>
                         </div>
                     @endcan
+                    @can('acceder modulo ingresos admision')
+                        <div class="rounded-xl bg-white/10 p-2" data-sidebar-group>
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left font-black text-white transition hover:bg-white/10"
+                                data-sidebar-toggle
+                                aria-expanded="{{ str_starts_with($currentRoute, 'ingresos-admision.') ? 'true' : 'false' }}"
+                            >
+                                <span>Ingresos y Admision</span>
+                                <span class="text-xs text-blue-100/70 transition" data-sidebar-chevron>▾</span>
+                            </button>
+
+                            <div
+                                class="mt-1 space-y-1 border-l border-white/15 pl-3"
+                                data-sidebar-panel
+                                @if (! str_starts_with($currentRoute, 'ingresos-admision.')) hidden @endif
+                            >
+                                @foreach ($incomeAdmissionNavigation as $item)
+                                    @can($item['permission'])
+                                        <a
+                                            href="{{ route($item['route']) }}"
+                                            @class([
+                                                'block rounded-lg px-3 py-2 font-semibold transition',
+                                                'bg-white/15 text-white shadow-sm' => str_starts_with($currentRoute, $item['match']),
+                                                'text-blue-50/80 hover:bg-white/10 hover:text-white' => ! str_starts_with($currentRoute, $item['match']),
+                                            ])
+                                        >
+                                            {{ $item['label'] }}
+                                        </a>
+                                    @endcan
+                                @endforeach
+                            </div>
+                        </div>
+                    @endcan
                 </nav>
 
                 <div class="border-t border-white/10 p-4">
@@ -179,6 +218,25 @@
                             <p class="mb-2 mt-3 text-xs font-black uppercase tracking-wide text-blue-700">Modulo Institucional</p>
                             <div class="flex gap-2 overflow-x-auto">
                                 @foreach ($institutionalNavigation as $item)
+                                    @can($item['permission'])
+                                        <a
+                                            href="{{ route($item['route']) }}"
+                                            @class([
+                                                'shrink-0 rounded-lg px-3 py-2 font-semibold',
+                                                'bg-blue-700 text-white' => str_starts_with($currentRoute, $item['match']),
+                                                'text-slate-600' => ! str_starts_with($currentRoute, $item['match']),
+                                            ])
+                                        >
+                                            {{ $item['label'] }}
+                                        </a>
+                                    @endcan
+                                @endforeach
+                            </div>
+                        @endcan
+                        @can('acceder modulo ingresos admision')
+                            <p class="mb-2 mt-3 text-xs font-black uppercase tracking-wide text-blue-700">Ingresos y Admision</p>
+                            <div class="flex gap-2 overflow-x-auto">
+                                @foreach ($incomeAdmissionNavigation as $item)
                                     @can($item['permission'])
                                         <a
                                             href="{{ route($item['route']) }}"
