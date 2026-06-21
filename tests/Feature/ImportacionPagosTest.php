@@ -81,6 +81,23 @@ test('lee formato banco nacion con age y codigos con ceros', function () {
         ->and($pago->voucher)->toBe('3037659');
 });
 
+test('reconoce xlsx aunque la ruta temporal no tenga extension', function () {
+    $this->seed([CanalPagoSeeder::class]);
+
+    $canal = CanalPago::query()->where('codigo', 'BANCO_NACION')->firstOrFail();
+    $xlsx = createTestXlsx([
+        ['DOCUMENTO', 'VOUCHER', 'COD_PAGO', 'AGENCIA'],
+        ['75808207000000', '3037659', '1096', '0248'],
+    ]);
+    $temporalSinExtension = tempnam(sys_get_temp_dir(), 'upload');
+    copy($xlsx, $temporalSinExtension);
+
+    $rows = app(ImportacionPagoService::class)->readRows($canal, $temporalSinExtension, 'xlsx');
+
+    expect($rows)->toHaveCount(1)
+        ->and($rows[0]['datos']['DOCUMENTO'])->toBe('75808207000000');
+});
+
 /**
  * @param  list<list<string>>  $rows
  */

@@ -18,6 +18,10 @@ return new class extends Migration
             $table->foreignId('concepto_pago_id')->constrained('conceptos_pago')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('canal_pago_id')->constrained('canales_pago')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('importacion_pago_detalle_id')->unique()->constrained('importacion_pago_detalles')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('inscripcion_id')->nullable()->constrained('inscripciones')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('matricula_id')->nullable()->constrained('matriculas')->cascadeOnUpdate()->nullOnDelete();
+            $table->timestamp('asociado_at')->nullable();
+            $table->foreignId('asociado_por')->nullable()->constrained('users')->cascadeOnUpdate()->nullOnDelete();
             $table->string('estado', 60);
             $table->text('observacion')->nullable();
             $table->timestamps();
@@ -29,7 +33,11 @@ return new class extends Migration
             $table->index('fecha_pago');
             $table->index('concepto_pago_id');
             $table->index('canal_pago_id');
+            $table->index('inscripcion_id');
+            $table->index('matricula_id');
+            $table->index('asociado_por');
             $table->index('estado');
+            $table->unique(['matricula_id', 'concepto_pago_id'], 'pagos_matricula_concepto_unique');
         });
 
         Schema::table('importacion_pago_detalles', function (Blueprint $table) {

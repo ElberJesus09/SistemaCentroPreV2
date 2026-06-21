@@ -16,6 +16,10 @@
         ['label' => 'Pagos', 'route' => 'ingresos-admision.pagos.index', 'match' => 'ingresos-admision.pagos.show', 'permission' => 'ver pagos'],
         ['label' => 'Importaciones', 'route' => 'ingresos-admision.pagos.importaciones.index', 'match' => 'ingresos-admision.pagos.importaciones.', 'permission' => 'ver importaciones de pagos'],
         ['label' => 'Codigos externos', 'route' => 'ingresos-admision.pagos.codigos-externos.index', 'match' => 'ingresos-admision.pagos.codigos-externos.', 'permission' => 'gestionar codigos externos de pago'],
+        ['label' => 'Ciclos academicos', 'route' => 'ingresos-admision.ciclos.index', 'match' => 'ingresos-admision.ciclos.', 'permission' => 'ver ciclos academicos'],
+        ['label' => 'Turnos', 'route' => 'ingresos-admision.turnos.index', 'match' => 'ingresos-admision.turnos.', 'permission' => 'ver turnos'],
+        ['label' => 'Ofertas academicas', 'route' => 'ingresos-admision.ofertas.index', 'match' => 'ingresos-admision.ofertas.', 'permission' => 'ver ofertas academicas'],
+        ['label' => 'Alumnos', 'route' => 'ingresos-admision.alumnos.index', 'match' => 'ingresos-admision.alumnos.', 'permission' => 'ver alumnos'],
     ];
 @endphp
 
@@ -181,77 +185,93 @@
                             <button class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700">Salir</button>
                         </form>
                     </div>
-                    <nav class="border-t border-slate-100 px-4 py-2 text-sm lg:hidden">
-                        @can('acceder dashboard')
-                            <a
-                                href="{{ route('dashboard') }}"
-                                @class([
-                                    'mb-2 inline-flex rounded-lg px-3 py-2 font-semibold',
-                                    'bg-blue-700 text-white' => $currentRoute === 'dashboard',
-                                    'text-slate-600' => $currentRoute !== 'dashboard',
-                                ])
-                            >
-                                Dashboard
-                            </a>
-                        @endcan
+                    <nav class="border-t border-slate-100 px-4 py-3 text-sm lg:hidden">
+                        <details class="group">
+                            <summary class="flex cursor-pointer list-none items-center justify-between rounded-lg bg-blue-700 px-4 py-2.5 font-black text-white shadow-sm">
+                                <span>Menu del sistema</span>
+                                <span class="text-xs text-blue-100 transition group-open:rotate-180">v</span>
+                            </summary>
+                            <div class="mt-3 space-y-4 rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+                                @can('acceder dashboard')
+                                    <a
+                                        href="{{ route('dashboard') }}"
+                                        @class([
+                                            'block rounded-lg px-3 py-2 font-bold',
+                                            'bg-blue-700 text-white' => $currentRoute === 'dashboard',
+                                            'text-slate-700 hover:bg-slate-50' => $currentRoute !== 'dashboard',
+                                        ])
+                                    >
+                                        Dashboard
+                                    </a>
+                                @endcan
 
-                        @can('acceder modulo personal')
-                            <p class="mb-2 text-xs font-black uppercase tracking-wide text-blue-700">Modulo Personal</p>
-                            <div class="flex gap-2 overflow-x-auto">
-                                @foreach ($navigation as $item)
-                                    @can($item['permission'])
-                                        <a
-                                            href="{{ route($item['route']) }}"
-                                            @class([
-                                                'shrink-0 rounded-lg px-3 py-2 font-semibold',
-                                                'bg-blue-700 text-white' => str_starts_with($currentRoute, $item['match']),
-                                                'text-slate-600' => ! str_starts_with($currentRoute, $item['match']),
-                                            ])
-                                        >
-                                            {{ $item['label'] }}
-                                        </a>
-                                    @endcan
-                                @endforeach
+                                @can('acceder modulo personal')
+                                    <div>
+                                        <p class="px-1 text-[11px] font-black uppercase tracking-wide text-blue-700">Modulo Personal</p>
+                                        <div class="mt-2 flex flex-wrap gap-2">
+                                            @foreach ($navigation as $item)
+                                                @can($item['permission'])
+                                                    <a
+                                                        href="{{ route($item['route']) }}"
+                                                        @class([
+                                                            'rounded-lg px-3 py-2 font-semibold',
+                                                            'bg-blue-700 text-white' => str_starts_with($currentRoute, $item['match']),
+                                                            'bg-slate-50 text-slate-700 hover:bg-slate-100' => ! str_starts_with($currentRoute, $item['match']),
+                                                        ])
+                                                    >
+                                                        {{ $item['label'] }}
+                                                    </a>
+                                                @endcan
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endcan
+
+                                @can('acceder modulo institucional')
+                                    <div>
+                                        <p class="px-1 text-[11px] font-black uppercase tracking-wide text-blue-700">Modulo Institucional</p>
+                                        <div class="mt-2 flex flex-wrap gap-2">
+                                            @foreach ($institutionalNavigation as $item)
+                                                @can($item['permission'])
+                                                    <a
+                                                        href="{{ route($item['route']) }}"
+                                                        @class([
+                                                            'rounded-lg px-3 py-2 font-semibold',
+                                                            'bg-blue-700 text-white' => str_starts_with($currentRoute, $item['match']),
+                                                            'bg-slate-50 text-slate-700 hover:bg-slate-100' => ! str_starts_with($currentRoute, $item['match']),
+                                                        ])
+                                                    >
+                                                        {{ $item['label'] }}
+                                                    </a>
+                                                @endcan
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endcan
+
+                                @can('acceder modulo ingresos admision')
+                                    <div>
+                                        <p class="px-1 text-[11px] font-black uppercase tracking-wide text-blue-700">Ingresos y Admision</p>
+                                        <div class="mt-2 flex flex-wrap gap-2">
+                                            @foreach ($incomeAdmissionNavigation as $item)
+                                                @can($item['permission'])
+                                                    <a
+                                                        href="{{ route($item['route']) }}"
+                                                        @class([
+                                                            'rounded-lg px-3 py-2 font-semibold',
+                                                            'bg-blue-700 text-white' => str_starts_with($currentRoute, $item['match']),
+                                                            'bg-slate-50 text-slate-700 hover:bg-slate-100' => ! str_starts_with($currentRoute, $item['match']),
+                                                        ])
+                                                    >
+                                                        {{ $item['label'] }}
+                                                    </a>
+                                                @endcan
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endcan
                             </div>
-                        @endcan
-                        @can('acceder modulo institucional')
-                            <p class="mb-2 mt-3 text-xs font-black uppercase tracking-wide text-blue-700">Modulo Institucional</p>
-                            <div class="flex gap-2 overflow-x-auto">
-                                @foreach ($institutionalNavigation as $item)
-                                    @can($item['permission'])
-                                        <a
-                                            href="{{ route($item['route']) }}"
-                                            @class([
-                                                'shrink-0 rounded-lg px-3 py-2 font-semibold',
-                                                'bg-blue-700 text-white' => str_starts_with($currentRoute, $item['match']),
-                                                'text-slate-600' => ! str_starts_with($currentRoute, $item['match']),
-                                            ])
-                                        >
-                                            {{ $item['label'] }}
-                                        </a>
-                                    @endcan
-                                @endforeach
-                            </div>
-                        @endcan
-                        @can('acceder modulo ingresos admision')
-                            <p class="mb-2 mt-3 text-xs font-black uppercase tracking-wide text-blue-700">Ingresos y Admision</p>
-                            <div class="flex gap-2 overflow-x-auto">
-                                @foreach ($incomeAdmissionNavigation as $item)
-                                    @can($item['permission'])
-                                        <a
-                                            href="{{ route($item['route']) }}"
-                                            @class([
-                                                'shrink-0 rounded-lg px-3 py-2 font-semibold',
-                                                'bg-blue-700 text-white' => str_starts_with($currentRoute, $item['match']),
-                                                'text-slate-600' => ! str_starts_with($currentRoute, $item['match']),
-                                            ])
-                                        >
-                                            {{ $item['label'] }}
-                                        </a>
-                                    @endcan
-                                @endforeach
-                            </div>
-                        @endcan
+                        </details>
                     </nav>
                 </header>
 
@@ -272,33 +292,52 @@
         </main>
     @endauth
     @auth
-        <div
-            id="confirm-modal"
-            class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 px-4"
-            aria-hidden="true"
+        <dialog
+            id="app-confirm-dialog"
+            class="fixed inset-0 z-50 m-auto w-[calc(100%-2rem)] max-w-md overflow-hidden rounded-xl border border-slate-200 bg-white p-0 text-left text-slate-900 shadow-2xl backdrop:bg-slate-950/55 backdrop:backdrop-blur-[2px]"
+            aria-labelledby="app-confirm-dialog-title"
+            aria-describedby="app-confirm-dialog-message"
+            onclick="if (event.target === this) this.close()"
         >
-            <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-                <div class="flex items-start gap-4">
-                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 text-xl font-black text-red-700">
-                        !
-                    </div>
-                    <div>
-                        <h2 id="confirm-modal-title" class="text-lg font-black text-slate-950">Confirmar accion</h2>
-                        <p id="confirm-modal-message" class="mt-2 text-sm leading-relaxed text-slate-600">
-                            Esta accion necesita confirmacion antes de continuar.
-                        </p>
-                    </div>
+            <div class="flex items-start gap-4 p-5 sm:p-6">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 text-xl font-black text-blue-700">
+                    ?
                 </div>
-                <div class="mt-6 flex justify-end gap-3">
-                    <button type="button" id="confirm-modal-cancel" class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50">
-                        Cancelar
-                    </button>
-                    <button type="button" id="confirm-modal-accept" class="rounded-lg bg-red-700 px-4 py-2 text-sm font-bold text-white hover:bg-red-800">
-                        Si, continuar
-                    </button>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <h2 id="app-confirm-dialog-title" class="text-lg font-black text-slate-950">Confirmar accion</h2>
+                            <p id="app-confirm-dialog-message" class="mt-1 text-sm leading-relaxed text-slate-600">Deseas continuar?</p>
+                        </div>
+                        <button
+                            type="button"
+                            class="-mr-2 -mt-2 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                            data-confirm-cancel
+                            aria-label="Cerrar modal"
+                        >
+                            x
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <div class="flex flex-col-reverse gap-2 border-t border-slate-200 bg-slate-50 px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
+                <button
+                    type="button"
+                    class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    data-confirm-cancel
+                >
+                    Cancelar
+                </button>
+                <button
+                    type="button"
+                    class="inline-flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    data-confirm-accept
+                >
+                    Confirmar
+                </button>
+            </div>
+        </dialog>
     @endauth
     @auth
         <script>
@@ -329,46 +368,48 @@
             });
 
             (() => {
-                const modal = document.getElementById('confirm-modal');
-                const title = document.getElementById('confirm-modal-title');
-                const message = document.getElementById('confirm-modal-message');
-                const cancel = document.getElementById('confirm-modal-cancel');
-                const accept = document.getElementById('confirm-modal-accept');
+                const modal = document.getElementById('app-confirm-dialog');
+                const title = document.getElementById('app-confirm-dialog-title');
+                const message = document.getElementById('app-confirm-dialog-message');
+                const accept = modal?.querySelector('[data-confirm-accept]');
+                const cancelButtons = modal?.querySelectorAll('[data-confirm-cancel]') ?? [];
                 let pendingForm = null;
 
-                if (!modal || !title || !message || !cancel || !accept) {
+                if (!modal || !title || !message || !accept) {
                     return;
                 }
 
-                document.querySelectorAll('form[data-confirm]').forEach((form) => {
-                    form.addEventListener('submit', (event) => {
-                        if (form.dataset.confirmed === 'true') {
-                            return;
-                        }
+                document.addEventListener('submit', (event) => {
+                    const form = event.target;
+                    const submitter = event.submitter instanceof HTMLElement ? event.submitter : null;
 
-                        event.preventDefault();
-                        pendingForm = form;
-                        title.textContent = form.dataset.confirmTitle || 'Confirmar accion';
-                        message.textContent = form.dataset.confirm || 'Esta accion necesita confirmacion antes de continuar.';
-                        modal.classList.remove('hidden');
-                        modal.classList.add('flex');
-                        modal.setAttribute('aria-hidden', 'false');
-                    });
+                    if (!(form instanceof HTMLFormElement) || form.dataset.confirmed === 'true') {
+                        return;
+                    }
+
+                    const confirmMessage = submitter?.dataset.confirmMessage
+                        || form.dataset.confirmMessage
+                        || submitter?.dataset.confirm
+                        || form.dataset.confirm;
+
+                    if (!confirmMessage) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    pendingForm = form;
+                    title.textContent = submitter?.dataset.confirmTitle || form.dataset.confirmTitle || 'Confirmar accion';
+                    message.textContent = confirmMessage;
+                    accept.textContent = submitter?.dataset.confirmButton || form.dataset.confirmButton || 'Si, continuar';
+                    modal.showModal();
                 });
 
                 const close = () => {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                    modal.setAttribute('aria-hidden', 'true');
+                    modal.close();
                     pendingForm = null;
                 };
 
-                cancel.addEventListener('click', close);
-                modal.addEventListener('click', (event) => {
-                    if (event.target === modal) {
-                        close();
-                    }
-                });
+                cancelButtons.forEach((button) => button.addEventListener('click', close));
 
                 accept.addEventListener('click', () => {
                     if (!pendingForm) {
@@ -377,7 +418,9 @@
                     }
 
                     pendingForm.dataset.confirmed = 'true';
-                    pendingForm.submit();
+                    modal.close();
+                    pendingForm.requestSubmit();
+                    pendingForm = null;
                 });
             })();
         </script>

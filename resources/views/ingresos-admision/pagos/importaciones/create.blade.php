@@ -27,8 +27,8 @@
             </div>
             <div>
                 <label class="block text-sm font-semibold">Archivo Excel</label>
-                <input type="file" name="archivo" accept=".xlsx,.xls" class="mt-1 w-full">
-                <p class="mt-1 text-xs text-slate-500">XLSX soportado. XLS queda validado para activar lector binario luego.</p>
+                <input type="file" name="archivo" accept=".xlsx" class="mt-1 w-full">
+                <p class="mt-1 text-xs text-slate-500">Solo formato XLSX. Si el banco entrega XLS, guardalo como XLSX antes de cargarlo.</p>
             </div>
             <div class="flex gap-3">
                 <button class="rounded-lg bg-blue-700 px-4 py-2 text-sm font-bold text-white hover:bg-blue-800">Previsualizar observaciones</button>

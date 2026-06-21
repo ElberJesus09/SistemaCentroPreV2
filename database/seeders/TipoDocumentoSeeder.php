@@ -16,20 +16,23 @@ class TipoDocumentoSeeder extends Seeder
                 'longitud_minima' => 8,
                 'longitud_maxima' => 8,
                 'es_numerico' => true,
+                'permite_letras' => false,
             ],
             [
-                'nombre' => 'Carnet de extranjeria',
+                'nombre' => 'Carne de extranjeria',
                 'codigo' => 'CE',
-                'longitud_minima' => 6,
-                'longitud_maxima' => 20,
+                'longitud_minima' => 9,
+                'longitud_maxima' => 9,
                 'es_numerico' => false,
+                'permite_letras' => true,
             ],
             [
                 'nombre' => 'Pasaporte',
-                'codigo' => 'PAS',
+                'codigo' => 'PASAPORTE',
                 'longitud_minima' => 6,
                 'longitud_maxima' => 20,
                 'es_numerico' => false,
+                'permite_letras' => true,
             ],
         ];
 

@@ -47,4 +47,9 @@ class Sede extends Model
     {
         return $this->hasMany(Trabajador::class);
     }
+
+    public function ofertasAcademicas(): HasMany
+    {
+        return $this->hasMany(OfertaAcademica::class);
+    }
 }

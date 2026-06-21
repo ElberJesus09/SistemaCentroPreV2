@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('longitud_minima')->nullable();
             $table->unsignedTinyInteger('longitud_maxima')->nullable();
             $table->boolean('es_numerico')->default(false);
+            $table->boolean('permite_letras')->default(true);
             $table->boolean('estado')->default(true);
             $table->timestamps();
         });

@@ -23,6 +23,7 @@ class TipoDocumento extends Model
         'longitud_minima',
         'longitud_maxima',
         'es_numerico',
+        'permite_letras',
         'estado',
     ];
 
@@ -30,6 +31,7 @@ class TipoDocumento extends Model
     {
         return [
             'es_numerico' => 'boolean',
+            'permite_letras' => 'boolean',
             'estado' => 'boolean',
         ];
     }

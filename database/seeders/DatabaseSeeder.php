@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             GrupoAcademicoSeeder::class,
             FacultadSeeder::class,
             CarreraSeeder::class,
+            CicloAcademicoSeeder::class,
+            TurnoSeeder::class,
             CanalPagoSeeder::class,
             ConceptoPagoSeeder::class,
             CodigoPagoExternoSeeder::class,

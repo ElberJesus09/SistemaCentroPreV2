@@ -19,6 +19,10 @@ class Pago extends Model
         'concepto_pago_id',
         'canal_pago_id',
         'importacion_pago_detalle_id',
+        'inscripcion_id',
+        'matricula_id',
+        'asociado_at',
+        'asociado_por',
         'estado',
         'observacion',
     ];
@@ -27,6 +31,7 @@ class Pago extends Model
     {
         return [
             'fecha_pago' => 'date',
+            'asociado_at' => 'datetime',
             'estado' => EstadoPago::class,
         ];
     }
@@ -44,5 +49,20 @@ class Pago extends Model
     public function importacionPagoDetalle(): BelongsTo
     {
         return $this->belongsTo(ImportacionPagoDetalle::class);
+    }
+
+    public function inscripcion(): BelongsTo
+    {
+        return $this->belongsTo(Inscripcion::class);
+    }
+
+    public function matricula(): BelongsTo
+    {
+        return $this->belongsTo(Matricula::class);
+    }
+
+    public function asociadoPor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'asociado_por');
     }
 }

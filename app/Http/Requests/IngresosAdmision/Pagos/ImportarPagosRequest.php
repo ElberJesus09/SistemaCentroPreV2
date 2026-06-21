@@ -15,7 +15,7 @@ class ImportarPagosRequest extends FormRequest
     {
         return [
             'fecha_referencia' => ['required', 'date'],
-            'archivo' => ['required', 'file', 'max:10240', 'mimes:xlsx,xls'],
+            'archivo' => ['required', 'file', 'max:10240', 'extensions:xlsx'],
         ];
     }
 }

@@ -4,12 +4,21 @@ namespace App\Http\Requests\Personal;
 
 use App\Models\TipoDocumento;
 use App\Models\Trabajador;
+use App\Services\Documentos\DocumentoIdentidadService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
 class TrabajadorStoreRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'numero_documento' => strtoupper(trim((string) $this->input('numero_documento'))),
+            'correo' => $this->filled('correo') ? strtolower(trim((string) $this->input('correo'))) : null,
+        ]);
+    }
+
     public function authorize(): bool
     {
         return $this->user()?->can('create', Trabajador::class) ?? false;
@@ -58,12 +67,10 @@ class TrabajadorStoreRequest extends FormRequest
             return;
         }
 
-        if ($tipoDocumento->codigo === 'DNI' && ! preg_match('/^[0-9]{8}$/', $numeroDocumento)) {
-            $validator->errors()->add('numero_documento', 'El DNI debe tener exactamente 8 digitos.');
-        }
-
-        if ($tipoDocumento->codigo !== 'DNI' && ! preg_match('/^[A-Za-z0-9]+$/', $numeroDocumento)) {
-            $validator->errors()->add('numero_documento', 'El documento debe contener solo letras y numeros.');
+        try {
+            app(DocumentoIdentidadService::class)->normalizar($tipoDocumento, $numeroDocumento);
+        } catch (\InvalidArgumentException $e) {
+            $validator->errors()->add('numero_documento', $e->getMessage());
         }
     }
 }

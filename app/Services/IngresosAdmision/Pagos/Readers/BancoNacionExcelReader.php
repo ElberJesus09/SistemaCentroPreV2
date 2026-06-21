@@ -9,10 +9,6 @@ class BancoNacionExcelReader implements PaymentFileReaderInterface
 {
     public function read(string $path): array
     {
-        if (! str_ends_with(strtolower($path), '.xlsx')) {
-            throw new RuntimeException('Por ahora solo se puede leer XLSX. Para XLS se agregara lector binario.');
-        }
-
         return $this->readXlsx($path);
     }
 
