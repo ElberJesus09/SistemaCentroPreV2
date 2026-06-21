@@ -11,13 +11,14 @@ use App\Http\Controllers\Personal\RolController;
 use App\Http\Controllers\Personal\TrabajadorController;
 use App\Http\Controllers\Personal\UsuarioPermisoTemporalController;
 use App\Http\Controllers\Personal\UsuarioController;
+use App\Http\Controllers\Publico\CarreraController as CarreraPublicaController;
+use App\Http\Controllers\Publico\InicioController;
+use App\Http\Controllers\Publico\SedeController as SedePublicaController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return auth()->check()
-        ? redirect()->route('dashboard')
-        : redirect()->route('login');
-});
+Route::get('/', InicioController::class)->name('inicio');
+Route::get('/carreras', CarreraPublicaController::class)->name('publico.carreras');
+Route::get('/sedes', SedePublicaController::class)->name('publico.sedes');
 
 Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'permission:acceder dashboard'])
