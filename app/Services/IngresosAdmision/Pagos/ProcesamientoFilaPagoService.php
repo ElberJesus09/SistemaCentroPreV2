@@ -2,11 +2,15 @@
 
 namespace App\Services\IngresosAdmision\Pagos;
 
+use App\Enums\IngresosAdmision\Alumnos\EstadoMatricula;
+use App\Enums\IngresosAdmision\Alumnos\EstadoPagosMatricula;
 use App\Enums\IngresosAdmision\Pagos\EstadoDetalleImportacionPago;
 use App\Enums\IngresosAdmision\Pagos\EstadoPago;
+use App\Models\Alumno;
+use App\Models\CanalPago;
 use App\Models\ImportacionPago;
 use App\Models\ImportacionPagoDetalle;
-use App\Models\CanalPago;
+use App\Models\Matricula;
 use App\Models\Pago;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -76,6 +80,7 @@ class ProcesamientoFilaPagoService
                 ]);
 
                 $detalle->update(['pago_id' => $pago->id]);
+                $this->associatePaymentIfPossible($pago);
 
                 return $detalle->fresh();
             } catch (Throwable $e) {
@@ -191,6 +196,88 @@ class ProcesamientoFilaPagoService
         $value = trim((string) $value);
 
         return $value === '' ? null : $value;
+    }
+
+    private function associatePaymentIfPossible(Pago $pago): void
+    {
+        if ($pago->fecha_pago->greaterThan(Carbon::create(2026, 6, 21))) {
+            return;
+        }
+
+        $conceptoCodigo = $pago->conceptoPago()->value('codigo');
+        if (! in_array($conceptoCodigo, ['MATRICULA', 'PENSION'], true)) {
+            return;
+        }
+
+        $alumno = Alumno::query()
+            ->where('numero_documento', $pago->numero_documento)
+            ->whereHas('tipoDocumento', fn ($query) => $query->where('codigo', $pago->tipo_documento))
+            ->first();
+
+        if ($alumno === null) {
+            return;
+        }
+
+        $matricula = Matricula::query()
+            ->where('alumno_id', $alumno->id)
+            ->latest('fecha_matricula')
+            ->latest('id')
+            ->first();
+
+        if ($matricula === null) {
+            return;
+        }
+
+        $conceptoYaAsociado = Pago::query()
+            ->where('matricula_id', $matricula->id)
+            ->where('concepto_pago_id', $pago->concepto_pago_id)
+            ->whereKeyNot($pago->id)
+            ->exists();
+
+        if ($conceptoYaAsociado) {
+            return;
+        }
+
+        $pago->update([
+            'inscripcion_id' => $matricula->inscripcion_id,
+            'matricula_id' => $matricula->id,
+            'asociado_at' => now(),
+            'estado' => EstadoPago::Asociado,
+            'observacion' => trim((string) $pago->observacion."\nAsociado automaticamente por DNI al importar el pago."),
+        ]);
+
+        $this->refreshMatriculaPaymentState($matricula);
+    }
+
+    private function refreshMatriculaPaymentState(Matricula $matricula): void
+    {
+        $conceptos = Pago::query()
+            ->where('matricula_id', $matricula->id)
+            ->where('estado', EstadoPago::Asociado)
+            ->whereHas('conceptoPago', fn ($query) => $query->whereIn('codigo', ['MATRICULA', 'PENSION']))
+            ->with('conceptoPago')
+            ->get()
+            ->pluck('conceptoPago.codigo')
+            ->all();
+
+        $hasMatricula = in_array('MATRICULA', $conceptos, true);
+        $hasPension = in_array('PENSION', $conceptos, true);
+
+        $matricula->update([
+            'estado' => match (true) {
+                $hasMatricula && $hasPension => EstadoMatricula::Activa,
+                $hasMatricula => EstadoMatricula::PendientePagoPension,
+                $hasPension => EstadoMatricula::PendientePagoMatricula,
+                default => EstadoMatricula::PendientePagos,
+            },
+            'estado_pagos' => match (true) {
+                $hasMatricula && $hasPension => EstadoPagosMatricula::Completo,
+                $hasMatricula => EstadoPagosMatricula::PendientePension,
+                $hasPension => EstadoPagosMatricula::PendienteMatricula,
+                default => EstadoPagosMatricula::PendienteAmbos,
+            },
+            'activado_at' => $hasMatricula && $hasPension ? ($matricula->activado_at ?? now()) : null,
+        ]);
     }
 
     private function dateValue(mixed $value): ?Carbon

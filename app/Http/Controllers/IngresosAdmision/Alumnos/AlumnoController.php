@@ -23,14 +23,31 @@ use Illuminate\View\View;
 
 class AlumnoController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $search = trim((string) $request->query('q', ''));
+
         $alumnos = Alumno::query()
             ->with(['tipoDocumento'])
-            ->latest()
-            ->paginate(20);
+            ->when($search !== '', function ($query) use ($search): void {
+                $like = '%'.addcslashes($search, '%_\\').'%';
 
-        return view('ingresos-admision.alumnos.index', compact('alumnos'));
+                $query->where(function ($query) use ($like): void {
+                    $query
+                        ->where('codigo', 'like', $like)
+                        ->orWhere('numero_documento', 'like', $like)
+                        ->orWhere('nombres', 'like', $like)
+                        ->orWhere('apellido_paterno', 'like', $like)
+                        ->orWhere('apellido_materno', 'like', $like)
+                        ->orWhereRaw("CONCAT_WS(' ', apellido_paterno, apellido_materno, nombres) LIKE ?", [$like])
+                        ->orWhereRaw("CONCAT_WS(' ', nombres, apellido_paterno, apellido_materno) LIKE ?", [$like]);
+                });
+            })
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('ingresos-admision.alumnos.index', compact('alumnos', 'search'));
     }
 
     public function create(): View

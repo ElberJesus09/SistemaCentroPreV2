@@ -15,6 +15,29 @@
         @endcan
     </div>
 
+    <form id="alumnos-search-form" method="GET" action="{{ route('ingresos-admision.alumnos.index') }}" class="mb-4">
+        <div class="flex flex-col gap-2 rounded-xl bg-white p-4 shadow-sm sm:flex-row sm:items-center">
+            <div class="flex-1">
+                <label for="alumnos-search" class="sr-only">Buscar alumno</label>
+                <input
+                    id="alumnos-search"
+                    name="q"
+                    value="{{ $search }}"
+                    type="search"
+                    autocomplete="off"
+                    autofocus
+                    placeholder="Buscar por codigo, DNI, nombres o apellidos"
+                    class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                >
+            </div>
+            @if ($search !== '')
+                <a href="{{ route('ingresos-admision.alumnos.index') }}" class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-50">
+                    Limpiar
+                </a>
+            @endif
+        </div>
+    </form>
+
     <div class="overflow-hidden rounded-xl bg-white shadow-sm">
         <div class="overflow-x-auto">
         <table class="w-full min-w-[980px] text-left text-sm">
@@ -79,11 +102,32 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="px-4 py-6 text-center text-slate-500">Todavía no hay alumnos registrados.</td></tr>
+                    <tr>
+                        <td colspan="7" class="px-4 py-6 text-center text-slate-500">
+                            {{ $search !== '' ? 'No se encontraron alumnos con esa busqueda.' : 'Todavia no hay alumnos registrados.' }}
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>
         </div>
     </div>
     <div class="mt-4">{{ $alumnos->links() }}</div>
+
+    <script>
+        (() => {
+            const form = document.getElementById('alumnos-search-form');
+            const input = document.getElementById('alumnos-search');
+            if (!form || !input) {
+                return;
+            }
+
+            let timer = null;
+            input.setSelectionRange(input.value.length, input.value.length);
+            input.addEventListener('input', () => {
+                clearTimeout(timer);
+                timer = setTimeout(() => form.requestSubmit(), 350);
+            });
+        })();
+    </script>
 @endsection
