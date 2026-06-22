@@ -98,44 +98,13 @@ class RolePermissionSeeder extends Seeder
 
         $superadmin = Role::query()->firstOrCreate(['name' => 'Superadmin', 'guard_name' => 'web']);
         $administrador = Role::query()->firstOrCreate(['name' => 'Administrador', 'guard_name' => 'web']);
-        $secretaria = Role::query()->firstOrCreate(['name' => 'Secretaria', 'guard_name' => 'web']);
-        $docente = Role::query()->firstOrCreate(['name' => 'Docente', 'guard_name' => 'web']);
 
         $superadmin->syncPermissions($this->permisos);
         $administrador->syncPermissions($this->permisos);
-        $secretaria->syncPermissions([
-            'acceder dashboard',
-            'acceder modulo personal',
-            'ver trabajadores',
-            'crear trabajadores',
-            'editar trabajadores',
-            'ver usuarios',
-            'acceder modulo institucional',
-            'ver institucional',
-            'ver sedes',
-            'ver grupos academicos',
-            'ver facultades',
-            'ver carreras',
-            'acceder modulo ingresos admision',
-            'ver pagos',
-            'ver importaciones de pagos',
-            'ver detalles de importacion',
-            'ver ciclos academicos',
-            'ver turnos',
-            'ver ofertas academicas',
-            'ver alumnos',
-            'crear alumnos',
-            'editar alumnos',
-            'enviar correos alumnos',
-            'ver inscripciones',
-            'crear inscripciones',
-            'ver matriculas',
-            'crear matriculas',
-            'asociar pagos',
-        ]);
-        $docente->syncPermissions([
-            'acceder dashboard',
-        ]);
+        Role::query()
+            ->where('guard_name', 'web')
+            ->whereIn('name', ['Secretaria', 'Docente'])
+            ->delete();
 
         $admin = User::query()->firstOrCreate(
             ['email' => 'admin@centropre.test'],
