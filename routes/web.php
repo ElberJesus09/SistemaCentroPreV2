@@ -24,6 +24,7 @@ use App\Http\Controllers\Personal\UsuarioController;
 use App\Http\Controllers\Publico\CarreraController as CarreraPublicaController;
 use App\Http\Controllers\Publico\InicioController;
 use App\Http\Controllers\Publico\SedeController as SedePublicaController;
+use App\Http\Controllers\SmtpTestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', InicioController::class)->name('inicio');
@@ -33,6 +34,11 @@ Route::get('/sedes', SedePublicaController::class)->name('publico.sedes');
 Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'permission:acceder dashboard'])
     ->name('dashboard');
+
+Route::middleware(['auth', 'permission:acceder dashboard'])->group(function (): void {
+    Route::get('/smtp-test', [SmtpTestController::class, 'create'])->name('smtp-test.create');
+    Route::post('/smtp-test', [SmtpTestController::class, 'store'])->name('smtp-test.store');
+});
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
