@@ -26,9 +26,9 @@ class DatabaseSeeder extends Seeder
             CanalPagoSeeder::class,
             ConceptoPagoSeeder::class,
             CodigoPagoExternoSeeder::class,
+            RolePermissionSeeder::class,
             PagosExcelSeeder::class,
             Backup21Seeder::class,
-            RolePermissionSeeder::class,
         ]);
     }
 }
