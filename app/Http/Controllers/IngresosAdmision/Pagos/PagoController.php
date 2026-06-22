@@ -30,7 +30,7 @@ class PagoController extends Controller
 
     public function show(Pago $pago): View
     {
-        $pago->load(['canalPago', 'conceptoPago', 'importacionPagoDetalle.importacionPago']);
+        $pago->load(['canalPago', 'conceptoPago']);
 
         return view('ingresos-admision.pagos.show', compact('pago'));
     }

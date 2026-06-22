@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('agencia', 60)->nullable();
             $table->foreignId('concepto_pago_id')->constrained('conceptos_pago')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('canal_pago_id')->constrained('canales_pago')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('importacion_pago_detalle_id')->unique()->constrained('importacion_pago_detalles')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('inscripcion_id')->nullable()->constrained('inscripciones')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('matricula_id')->nullable()->constrained('matriculas')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamp('asociado_at')->nullable();
@@ -40,16 +39,10 @@ return new class extends Migration
             $table->unique(['matricula_id', 'concepto_pago_id'], 'pagos_matricula_concepto_unique');
         });
 
-        Schema::table('importacion_pago_detalles', function (Blueprint $table) {
-            $table->foreign('pago_id')->references('id')->on('pagos')->cascadeOnUpdate()->nullOnDelete();
-        });
     }
 
     public function down(): void
     {
-        Schema::table('importacion_pago_detalles', function (Blueprint $table) {
-            $table->dropForeign(['pago_id']);
-        });
         Schema::dropIfExists('pagos');
     }
 };

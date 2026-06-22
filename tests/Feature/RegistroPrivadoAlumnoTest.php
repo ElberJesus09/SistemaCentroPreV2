@@ -4,7 +4,6 @@ use App\Enums\IngresosAdmision\Pagos\EstadoPago;
 use App\Models\CanalPago;
 use App\Models\Carrera;
 use App\Models\CicloAcademico;
-use App\Models\CodigoPagoExterno;
 use App\Models\ConceptoPago;
 use App\Models\Facultad;
 use App\Models\GrupoAcademico;
@@ -35,7 +34,6 @@ test('secretaria registra alumno con solo pago de matricula y queda pendiente de
         'agencia' => '0248',
         'concepto_pago_id' => $matricula->id,
         'canal_pago_id' => $canal->id,
-        'importacion_pago_detalle_id' => importacionDetalleId(),
         'estado' => EstadoPago::Disponible,
     ]);
 
@@ -119,25 +117,4 @@ function payloadAlumno(int $tipoDocumentoId, int $carreraId, int $ofertaId, arra
         'carrera_id' => $carreraId,
         'oferta_academica_id' => $ofertaId,
     ], $override);
-}
-
-function importacionDetalleId(): int
-{
-    $importacion = \App\Models\ImportacionPago::query()->create([
-        'canal_pago_id' => CanalPago::query()->first()->id,
-        'fecha_referencia' => '2026-06-16',
-        'nombre_archivo' => 'banco.xlsx',
-        'extension' => 'xlsx',
-        'tamano' => 100,
-        'hash_archivo' => str_repeat('a', 64),
-        'importado_por' => User::factory()->create()->id,
-        'estado' => 'procesada',
-    ]);
-
-    return \App\Models\ImportacionPagoDetalle::query()->create([
-        'importacion_pago_id' => $importacion->id,
-        'numero_fila' => 2,
-        'datos_origen' => [],
-        'estado' => 'procesada',
-    ])->id;
 }

@@ -14,7 +14,6 @@
     ];
     $incomeAdmissionNavigation = [
         ['label' => 'Pagos', 'route' => 'ingresos-admision.pagos.index', 'match' => 'ingresos-admision.pagos.show', 'permission' => 'ver pagos'],
-        ['label' => 'Importaciones', 'route' => 'ingresos-admision.pagos.importaciones.index', 'match' => 'ingresos-admision.pagos.importaciones.', 'permission' => 'ver importaciones de pagos'],
         ['label' => 'Codigos externos', 'route' => 'ingresos-admision.pagos.codigos-externos.index', 'match' => 'ingresos-admision.pagos.codigos-externos.', 'permission' => 'gestionar codigos externos de pago'],
         ['label' => 'Ciclos academicos', 'route' => 'ingresos-admision.ciclos.index', 'match' => 'ingresos-admision.ciclos.', 'permission' => 'ver ciclos academicos'],
         ['label' => 'Turnos', 'route' => 'ingresos-admision.turnos.index', 'match' => 'ingresos-admision.turnos.', 'permission' => 'ver turnos'],

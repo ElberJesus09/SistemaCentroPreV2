@@ -18,7 +18,6 @@ class Pago extends Model
         'agencia',
         'concepto_pago_id',
         'canal_pago_id',
-        'importacion_pago_detalle_id',
         'inscripcion_id',
         'matricula_id',
         'asociado_at',
@@ -44,11 +43,6 @@ class Pago extends Model
     public function canalPago(): BelongsTo
     {
         return $this->belongsTo(CanalPago::class);
-    }
-
-    public function importacionPagoDetalle(): BelongsTo
-    {
-        return $this->belongsTo(ImportacionPagoDetalle::class);
     }
 
     public function inscripcion(): BelongsTo

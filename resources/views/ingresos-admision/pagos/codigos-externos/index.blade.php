@@ -6,7 +6,7 @@
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h1 class="text-2xl font-black text-slate-950">Codigos externos de pago</h1>
-            <p class="mt-1 text-sm text-slate-500">Relacionan el codigo del Excel con Matricula o Pension.</p>
+            <p class="mt-1 text-sm text-slate-500">Relacionan codigos externos con Matricula o Pension.</p>
         </div>
         <a href="{{ route('ingresos-admision.pagos.codigos-externos.create') }}" class="rounded-lg bg-blue-700 px-4 py-2 text-sm font-bold text-white hover:bg-blue-800">Nuevo codigo</a>
     </div>

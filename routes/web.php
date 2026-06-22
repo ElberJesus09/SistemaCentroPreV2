@@ -13,9 +13,7 @@ use App\Http\Controllers\IngresosAdmision\Academico\TurnoController;
 use App\Http\Controllers\IngresosAdmision\Alumnos\AlumnoCorreoController;
 use App\Http\Controllers\IngresosAdmision\Alumnos\AlumnoController;
 use App\Http\Controllers\IngresosAdmision\Alumnos\AlumnoDocumentoController;
-use App\Http\Controllers\IngresosAdmision\Pagos\ImportacionPagoController;
 use App\Http\Controllers\IngresosAdmision\Pagos\PagoController;
-use App\Http\Controllers\IngresosAdmision\Pagos\ReprocesamientoPagoController;
 use App\Http\Controllers\Institucional\SedeController;
 use App\Http\Controllers\Personal\RolController;
 use App\Http\Controllers\Personal\TrabajadorController;
@@ -24,7 +22,6 @@ use App\Http\Controllers\Personal\UsuarioController;
 use App\Http\Controllers\Publico\CarreraController as CarreraPublicaController;
 use App\Http\Controllers\Publico\InicioController;
 use App\Http\Controllers\Publico\SedeController as SedePublicaController;
-use App\Http\Controllers\SmtpTestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', InicioController::class)->name('inicio');
@@ -34,11 +31,6 @@ Route::get('/sedes', SedePublicaController::class)->name('publico.sedes');
 Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'permission:acceder dashboard'])
     ->name('dashboard');
-
-Route::middleware(['auth', 'permission:acceder dashboard'])->group(function (): void {
-    Route::get('/smtp-test', [SmtpTestController::class, 'create'])->name('smtp-test.create');
-    Route::post('/smtp-test', [SmtpTestController::class, 'store'])->name('smtp-test.store');
-});
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
@@ -172,30 +164,6 @@ Route::middleware(['auth', 'permission:acceder modulo ingresos admision'])
                 Route::get('/', [PagoController::class, 'index'])
                     ->middleware('permission:ver pagos')
                     ->name('index');
-
-                Route::post('importaciones/previsualizar', [ImportacionPagoController::class, 'preview'])
-                    ->middleware('permission:importar pagos')
-                    ->name('importaciones.preview');
-
-                Route::post('importaciones/confirmar', [ImportacionPagoController::class, 'confirm'])
-                    ->middleware('permission:importar pagos')
-                    ->name('importaciones.confirm');
-
-                Route::resource('importaciones', ImportacionPagoController::class)
-                    ->middleware([
-                        'index' => 'permission:ver importaciones de pagos',
-                        'create' => 'permission:importar pagos',
-                        'show' => 'permission:ver detalles de importacion',
-                    ])
-                    ->parameters(['importaciones' => 'importacion'])
-                    ->only(['index', 'create', 'show']);
-                Route::get('importaciones/{importacion}/descargar', [ImportacionPagoController::class, 'download'])
-                    ->middleware('permission:descargar archivos de pagos')
-                    ->name('importaciones.download');
-
-                Route::post('detalles/{detalle}/reprocesar', [ReprocesamientoPagoController::class, 'store'])
-                    ->middleware('permission:reprocesar pagos observados')
-                    ->name('detalles.reprocesar');
 
                 Route::resource('codigos-externos', CodigoPagoExternoController::class)
                     ->middleware('permission:gestionar codigos externos de pago')

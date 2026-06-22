@@ -21,11 +21,6 @@ class CanalPago extends Model
         return $this->hasMany(CodigoPagoExterno::class);
     }
 
-    public function importaciones(): HasMany
-    {
-        return $this->hasMany(ImportacionPago::class);
-    }
-
     public function pagos(): HasMany
     {
         return $this->hasMany(Pago::class);

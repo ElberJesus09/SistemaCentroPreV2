@@ -26,7 +26,6 @@
             'Modulo Ingresos y Admision' => [
                 'Acceso general' => ['acceder modulo ingresos admision'],
                 'Pagos' => ['ver pagos', 'asociar pagos', 'observar pagos', 'rechazar pagos', 'anular pagos'],
-                'Importaciones' => ['ver importaciones de pagos', 'importar pagos', 'descargar archivos de pagos', 'ver detalles de importacion', 'reprocesar pagos observados'],
                 'Codigos externos' => ['gestionar codigos externos de pago'],
                 'Ciclos academicos' => ['ver ciclos academicos', 'gestionar ciclos academicos'],
                 'Turnos' => ['ver turnos', 'gestionar turnos'],
@@ -48,10 +47,6 @@
             'gestionar ofertas academicas' => 'Gestionar ofertas académicas',
             'enviar correos alumnos' => 'Enviar correos a alumnos',
             'registrar alumnos sin pagos' => 'Registrar alumnos sin pagos',
-            'ver importaciones de pagos' => 'Ver importaciones',
-            'ver detalles de importacion' => 'Ver detalles de importación',
-            'reprocesar pagos observados' => 'Reprocesar pagos observados',
-            'descargar archivos de pagos' => 'Descargar archivos de pagos',
             'asociar pagos' => 'Asociar pagos',
         ];
     @endphp

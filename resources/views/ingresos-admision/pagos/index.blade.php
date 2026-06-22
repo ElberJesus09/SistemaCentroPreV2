@@ -6,11 +6,8 @@
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h1 class="text-2xl font-black text-slate-950">Pagos oficiales</h1>
-            <p class="mt-1 text-sm text-slate-500">Pagos validos importados desde archivos oficiales.</p>
+            <p class="mt-1 text-sm text-slate-500">Pagos validos registrados en el sistema.</p>
         </div>
-        @can('ver importaciones de pagos')
-            <a href="{{ route('ingresos-admision.pagos.importaciones.index') }}" class="rounded-lg bg-blue-700 px-4 py-2 text-sm font-bold text-white hover:bg-blue-800">Ver importaciones</a>
-        @endcan
     </div>
 
     <form method="GET" class="mb-4 flex gap-2">
