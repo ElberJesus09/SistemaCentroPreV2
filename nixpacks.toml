@@ -1,0 +1,17 @@
+[phases.setup]
+nixPkgs = [
+    "php83",
+    "php83Packages.composer",
+    "php83Extensions.zip",
+    "nodejs_24",
+]
+
+[phases.build]
+cmds = [
+    "composer install --optimize-autoloader --no-dev --no-interaction",
+    "npm ci",
+    "npm run build",
+    "mkdir -p storage/framework/{sessions,views,cache,testing} storage/logs bootstrap/cache",
+    "chmod -R a+rw storage bootstrap/cache",
+    "php artisan config:cache",
+]
